@@ -1,5 +1,6 @@
 import { CalculatorIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import React, { Dispatch, SetStateAction } from 'react';
+import { useDarkmode } from '../hooks/useDarkmode';
 
 type SidebarProps = {
     setOpen: Dispatch<SetStateAction<boolean>>
@@ -9,7 +10,9 @@ type SidebarProps = {
 
 const Sidebar:React.FC<SidebarProps> = ({mode, setOpen, setMode}) => {
     
-    return <div className="w-1/2 lg:w-1/5 md:w-1/3 fixed top-0 bottom-0 bg-white shadow-lg p-3">
+    const { darkMode, setDarkMode } = useDarkmode()
+    
+    return <div className={`w-1/2 lg:w-1/5 md:w-1/3 fixed top-0 bottom-0 ${darkMode.darkMode ? "bg-black text-white":'bg-white'} shadow-lg p-3`}>
         <div className="w-full flex items-center justify-end">
           <XMarkIcon onClick={() => setOpen(prev => !prev)} className="w-6 h-6 cursor-pointer" />
         </div>

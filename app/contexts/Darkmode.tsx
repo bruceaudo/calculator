@@ -28,7 +28,7 @@ export interface Props {
 }
 
 export const DarkModeContextProvider = ({ children }: Props) => {
-    const [darkMode, setDarkMode] = useState(defaultMode)
+    const [darkMode, setDarkMode] = useState<DarkMode>(defaultMode)
 
     return <DarkModeContext.Provider value={{darkMode, setDarkMode}}>
         {children}

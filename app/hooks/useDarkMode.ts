@@ -1,11 +1,10 @@
-"use client"
-import { useContext } from 'react'
-import { DarkModeContext } from '../contexts/Darkmode'
+import { useContext } from "react"
+import { DarkModeContext } from "../contexts/Darkmode"
 
-export const useDarkMode = () => {
+export const useDarkmode = () => {
   const context = useContext(DarkModeContext)
   if (!context) {
-    console.log('useDarkMode must be used within a DarkModeContextProvider')
+    console.log('useDarkmode must be used within a DarkModeContextProvider')
   }
   return context
 }

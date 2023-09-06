@@ -1,19 +1,21 @@
 "use client";
 import { useRef, useState } from "react";
 import Navigation from "./components/Navigation";
-import { useDarkMode } from "./hooks/useDarkMode";
 import axios from "axios";
 import Sidebar from "./components/Sidebar";
+import { useDarkmode } from "./hooks/useDarkmode";
 
 
 
 export default function Home() {
+  const { darkMode, setDarkMode } = useDarkmode()
 
   const [expression, setExpression] = useState("");
   const [loading, setLoading] = useState(false);
   const btnDisabled = loading || expression === ""
   const[openMenu, setOpenMenu] = useState(false)
-  const[mode, setMode] = useState("Standard")
+  const [mode, setMode] = useState("Standard")
+  const history: String[] = []
 
   const percRef = useRef<HTMLButtonElement | null>(null);
   const exponentialRef = useRef<HTMLButtonElement | null>(null);
@@ -92,6 +94,7 @@ export default function Home() {
 
       console.log("Data from backend: ", response.data);
       setExpression(prevString => (prevString = response.data));
+      history.push(expression)
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -99,16 +102,18 @@ export default function Home() {
     }
   };
 
-  return <main className="relative">
-    <Navigation setOpen={setOpenMenu} />
-    {openMenu && <Sidebar mode={mode} setMode={setMode} setOpen={setOpenMenu} />}
+  return <main className={`relative ${darkMode.darkMode ? "bg-black text-white" : ""}`}>
+      <Navigation setOpen={setOpenMenu} />
+      {openMenu && <Sidebar mode={mode} setMode={setMode} setOpen={setOpenMenu} />}
       {loading && <div className="loading-container">
           <div className="loading-line" />
         </div>}
       <section className="h-screen lg:mb-8 mb-4 lg:flex lg:gap-3 lg:mx-8">
         <section className="h-full lg:w-[70%]">
           <section className="h-[30%] lg:px-8 px-4">
-          <div className="font-semibold text-2xl h-[30%]">{mode}</div>
+            <div className="font-semibold text-2xl h-[30%]">
+              {mode}
+            </div>
             <div className="text-4xl font-semibold flex items-end justify-end h-[70%] p-3 lg:p-6 sm:p-5">
               <span>
                 {expression == "" ? "0" : expression}
@@ -116,83 +121,92 @@ export default function Home() {
             </div>
           </section>
           <section className="h-[70%] grid grid-cols-4 grid-rows-6 gap-1 mx-1 sm:mx-4 lg:mx-8">
-              <button ref={percRef} onClick={() => handleButtonClick("%")}>
-                %
-              </button>
-              <button ref={factorialRef} onClick={() => handleButtonClick("!")}>
-                !
-              </button>
-              <button ref={cRef} onClick={() => handleButtonClick("C")}>
-                C
-              </button>
-              <button ref={delRef} onClick={() => handleButtonClick("del")}>
-                ⌫
-              </button>
-              <button ref={leftParenthesisRef} onClick={() => handleButtonClick("(")}>
-                (
-              </button>
-              <button ref={rightParenthesisRef} onClick={() => handleButtonClick(")")}>
-                )
-              </button>
-              <button ref={exponentialRef} onClick={() => handleButtonClick("^")}>
-                ^
-              </button>
-              <button ref={divideRef} onClick={() => handleButtonClick("÷")}>
-                ÷
-              </button>
-              <button ref={sevenRef} onClick={() => handleButtonClick("7")}>
-                7
-              </button>
-              <button ref={eightRef} onClick={() => handleButtonClick("8")}>
-                8
-              </button>
-              <button ref={nineRef} onClick={() => handleButtonClick("9")}>
-                9
-              </button>
-              <button ref={timesRef} onClick={() => handleButtonClick("×")}>
-                ×
-              </button>
-              <button ref={fourRef} onClick={() => handleButtonClick("4")}>
-                4
-              </button>
-              <button ref={fiveRef} onClick={() => handleButtonClick("5")}>
-                5
-              </button>
-              <button ref={sixRef} onClick={() => handleButtonClick("6")}>
-                6
-              </button>
-              <button ref={minusRef} onClick={() => handleButtonClick("-")}>
-                -
-              </button>
-              <button ref={oneRef} onClick={() => handleButtonClick("1")}>
-                1
-              </button>
-              <button ref={twoRef} onClick={() => handleButtonClick("2")}>
-                2
-              </button>
-              <button ref={threeRef} onClick={() => handleButtonClick("3")}>
-                3
-              </button>
-              <button ref={plusRef} onClick={() => handleButtonClick("+")}>
-                +
-              </button>
-              <button ref={othersRef} onClick={() => handleButtonClick("others")}>
-                +/-
-              </button>
-              <button ref={zeroRef} onClick={() => handleButtonClick("0")}>
-                0
-              </button>
-              <button ref={pointRef} onClick={() => handleButtonClick(".")}>
-                .
-              </button>
-              <button disabled={btnDisabled} ref={equalsRef} onClick={() => handleButtonClick("equals")} id="equals-btn" className="bg-[#00308f] text-white">
-                =
-              </button>
-            </section>
-          
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={percRef} onClick={() => handleButtonClick("%")}>
+              %
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={factorialRef} onClick={() => handleButtonClick("!")}>
+              !
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={cRef} onClick={() => handleButtonClick("C")}>
+              C
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={delRef} onClick={() => handleButtonClick("del")}>
+              ⌫
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={leftParenthesisRef} onClick={() => handleButtonClick("(")}>
+              (
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={rightParenthesisRef} onClick={() => handleButtonClick(")")}>
+              )
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={exponentialRef} onClick={() => handleButtonClick("^")}>
+              ^
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={divideRef} onClick={() => handleButtonClick("÷")}>
+              ÷
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={sevenRef} onClick={() => handleButtonClick("7")}>
+              7
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={eightRef} onClick={() => handleButtonClick("8")}>
+              8
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={nineRef} onClick={() => handleButtonClick("9")}>
+              9
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={timesRef} onClick={() => handleButtonClick("×")}>
+              ×
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={fourRef} onClick={() => handleButtonClick("4")}>
+              4
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={fiveRef} onClick={() => handleButtonClick("5")}>
+              5
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={sixRef} onClick={() => handleButtonClick("6")}>
+              6
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={minusRef} onClick={() => handleButtonClick("-")}>
+              -
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={oneRef} onClick={() => handleButtonClick("1")}>
+              1
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={twoRef} onClick={() => handleButtonClick("2")}>
+              2
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={threeRef} onClick={() => handleButtonClick("3")}>
+              3
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={plusRef} onClick={() => handleButtonClick("+")}>
+              +
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={othersRef} onClick={() => handleButtonClick("others")}>
+              +/-
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={zeroRef} onClick={() => handleButtonClick("0")}>
+              0
+            </button>
+            <button className={`${darkMode.darkMode ? "bg-[#222222] hover:bg-[#222222] hover:opacity-75 border-[#222222]" : ""}`} ref={pointRef} onClick={() => handleButtonClick(".")}>
+              .
+            </button>
+            <button disabled={btnDisabled} ref={equalsRef} onClick={() => handleButtonClick("equals")} id="equals-btn" className={`bg-[#00308f] text-white ${darkMode.darkMode ? "border-none" : ""}`}>
+              =
+            </button>
+          </section>
         </section>
-        <aside className="h-screen w-[30%] rounded-md bg-gray-100 hidden lg:inline-block p-3">
-          Left
+        <aside className={`h-screen w-[30%] rounded-md ${darkMode.darkMode ? "bg-[#222222] text-white" : "bg-gray-100"} hidden lg:inline-block p-3`}>
+          <h2 className="font-semibold mb-5">History</h2>
+          {history.length > 1 && history.map((exp, index) =>
+              <p
+                onClick={() =>
+                  setExpression(prevString => (prevString = exp.toString()))}
+                key={index}
+                className="mb-5 w-full p-1.5 cursor-pointer"
+              >
+                {exp}
+              </p>
+            )}
         </aside>
       </section>
     </main>;
